@@ -140,8 +140,7 @@
 				email1,
 				email2,
 				cellphone,
-				homephone) VALUES(
-				'%s','%s','%s','%s','%s','%s','%s','%d','%s','%s','%s','%s'",
+				homephone) VALUES ('%s','%s','%s','%s','%s','%s','%s','%d','%s','%s','%s','%s')",
 				mysqli_real_escape_string($db, $cox),
 				mysqli_real_escape_string($db, $novice_varsity),
 				mysqli_real_escape_string($db, $first),
@@ -155,12 +154,14 @@
 				mysqli_real_escape_string($db, $cell),
 				mysqli_real_escape_string($db, $home));
 
+//$sql = "INSERT INTO rakers ( cox) VALUES ()
+
 			mysqli_query($db, $sql);
 			mysqli_close($db);
 			echo '<p>User added</p>';
 			printf("<br>$sql");
 		}
-	}
+	
 }
 ?>
 
