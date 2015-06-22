@@ -6,6 +6,8 @@
 <body>
 	<p><?php
 
+	readfile('navigation.tmpl.html');
+
 	$cox = '';
 	$novice_varsity = '';
 	$first = '';

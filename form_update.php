@@ -1,4 +1,7 @@
 <?php
+
+	readfile('navigation.tmpl.html');
+	
 // the update expects a rower ID with the post command
 // a bit of php code checks ID is digits, and is a valid ID
 // redirect in this case
