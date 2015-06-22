@@ -1,14 +1,16 @@
-<?php
 
-	readfile('navigation.tmpl.html');
-	
+<?php
+readfile('navigation.tmpl.html');
+?>
+
+<?php
 // the update expects a rower ID with the post command
 // a bit of php code checks ID is digits, and is a valid ID
 // redirect in this case
 if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	$id = $_GET['id'];
 } else {
-	header('Location: f__select_all.php');
+	header('Location: form_select.php');
 }
 
 ?>
@@ -20,12 +22,12 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 </head>
 <body>
 
-<?php
+	<?php
 // database code
-		$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
-		$sql = "DELETE FROM rakers WHERE id=$id";
-		mysqli_query($db, $sql);
-		mysqli_close($db);
-?>
+	$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
+	$sql = "DELETE FROM rakers WHERE id=$id";
+	mysqli_query($db, $sql);
+	mysqli_close($db);
+	?>
 </body>
 </html>

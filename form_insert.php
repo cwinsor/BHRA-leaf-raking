@@ -1,13 +1,16 @@
+
+<?php
+readfile('navigation.tmpl.html');
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>BHRA Leaf Raking</title>
 </head>
 <body>
-	<p><?php
-
-	readfile('navigation.tmpl.html');
-
+	<?php
 	$cox = '';
 	$novice_varsity = '';
 	$first = '';
@@ -134,17 +137,17 @@
 				cellphone,
 				homephone) VALUES (
 				'%s','%s','%s','%s','%s','%s', %d,'%s','%s','%s','%s')",
-				mysqli_real_escape_string($db, $cox),
-				mysqli_real_escape_string($db, $novice_varsity),
-				mysqli_real_escape_string($db, $first),
-				mysqli_real_escape_string($db, $last),
-				mysqli_real_escape_string($db, $gender),
-				mysqli_real_escape_string($db, $school),
-				mysqli_real_escape_string($db, $grade),
-				mysqli_real_escape_string($db, $email1),
-				mysqli_real_escape_string($db, $email2),
-				mysqli_real_escape_string($db, $cell),
-				mysqli_real_escape_string($db, $home));
+			mysqli_real_escape_string($db, $cox),
+			mysqli_real_escape_string($db, $novice_varsity),
+			mysqli_real_escape_string($db, $first),
+			mysqli_real_escape_string($db, $last),
+			mysqli_real_escape_string($db, $gender),
+			mysqli_real_escape_string($db, $school),
+			mysqli_real_escape_string($db, $grade),
+			mysqli_real_escape_string($db, $email1),
+			mysqli_real_escape_string($db, $email2),
+			mysqli_real_escape_string($db, $cell),
+			mysqli_real_escape_string($db, $home));
 
 // temporary
 		//	$sql = sprintf("INSERT INTO rakers () VALUES ()" );
@@ -156,7 +159,7 @@
 		}
 	}
 
-?>
+	?>
 
 
 </p>

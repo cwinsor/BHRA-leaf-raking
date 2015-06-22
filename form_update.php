@@ -1,14 +1,16 @@
-<?php
 
-	readfile('navigation.tmpl.html');
-	
+<?php
+readfile('navigation.tmpl.html');
+?>
+
+<?php
 // the update expects a rower ID with the post command
 // a bit of php code checks ID is digits, and is a valid ID
 // redirect in this case
 if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	$id = $_GET['id'];
 } else {
-	header('Location: f__select_all.php');
+	header('Location: form_select.php');
 }
 
 ?>
@@ -109,7 +111,7 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 		if ($fail!="") {
 			printf('bad input: %s',$fail);
 		} else {
-		
+			
 		// post to database
 
 			$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
@@ -126,18 +128,18 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 				cellphone='%s',
 				homephone='%s'
 				WHERE id='%s';",
-			mysqli_real_escape_string($db, $cox),
-			mysqli_real_escape_string($db, $novice_varsity),
-			mysqli_real_escape_string($db, $first),
-			mysqli_real_escape_string($db, $last),
-			mysqli_real_escape_string($db, $gender),
-			mysqli_real_escape_string($db, $school),
-			mysqli_real_escape_string($db, $grade),
-			mysqli_real_escape_string($db, $email1),
-			mysqli_real_escape_string($db, $email2),
-			mysqli_real_escape_string($db, $cell),
-			mysqli_real_escape_string($db, $home),
-			$id);
+				mysqli_real_escape_string($db, $cox),
+				mysqli_real_escape_string($db, $novice_varsity),
+				mysqli_real_escape_string($db, $first),
+				mysqli_real_escape_string($db, $last),
+				mysqli_real_escape_string($db, $gender),
+				mysqli_real_escape_string($db, $school),
+				mysqli_real_escape_string($db, $grade),
+				mysqli_real_escape_string($db, $email1),
+				mysqli_real_escape_string($db, $email2),
+				mysqli_real_escape_string($db, $cell),
+				mysqli_real_escape_string($db, $home),
+				$id);
 
 			mysqli_query($db, $sql);
 			mysqli_close($db);
