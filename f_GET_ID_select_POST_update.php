@@ -5,7 +5,7 @@
 if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	$id = $_GET['id'];
 } else {
-	header('Location: form_select_experimental.php');
+	header('Location: f__select_all.php');
 }
 
 ?>
@@ -30,11 +30,11 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	$cell = '';
 	$home = '';
 
-// validation
+// post
 	if (isset($_POST['submit'])) {
 		$fail = "";
 
-		if (!isset($_POST['cox']) || $_POST['cox'] === '') {
+		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
 			$fail .= " bad_cox";
 		} else {
 			$cox = $_POST['cox'];
@@ -120,8 +120,9 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 				grade='%s',
 				email1='%s',
 				email2='%s',
-				cellphone='%s'
-				WHERE id=%s",
+				cellphone='%s',
+				homephone='%s'
+				WHERE id='%s';",
 			mysqli_real_escape_string($db, $cox),
 			mysqli_real_escape_string($db, $novice_varsity),
 			mysqli_real_escape_string($db, $first),
@@ -138,11 +139,12 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 			mysqli_query($db, $sql);
 			mysqli_close($db);
 			echo '<p>User updated</p>';
-			//printf("<br>$sql");
+			printf("<br>$sql");
 		}
 
 	} else {
-// if not "submit" then prefill the fields
+// GET
+// if not post then prefill the fields
 // using current values from database
 		$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
 		$sql = sprintf('SELECT * FROM rakers WHERE id=%d', $id);
@@ -169,25 +171,25 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 <form method="post" actions="">
 
 	cox:
-	<input type="radio" name="cox" value="y"<?php
-	if ($cox === 'y') {
+	<input type="radio" name="cox" value="coxswain"<?php
+	if ($cox === 'coxswain') {
 		echo " checked";
 	}
 	?>>yes
-	<input type="radio" name="cox" value="n"<?php
-	if ($cox === 'n') {
+	<input type="radio" name="cox" value=""<?php
+	if ($cox === '') {
 		echo " checked";
 	}
 	?>>no<br>
 
 	novice_varsity:
-	<input type="radio" name="novice_varsity" value="n"<?php
-	if ($novice_varsity === 'n') {
+	<input type="radio" name="novice_varsity" value="Novice"<?php
+	if ($novice_varsity === 'Novice') {
 		echo " checked";
 	}
 	?>>novice
-	<input type="radio" name="novice_varsity" value="v"<?php
-	if ($novice_varsity === 'v') {
+	<input type="radio" name="novice_varsity" value="Varsity"<?php
+	if ($novice_varsity === 'Varsity') {
 		echo " checked";
 	}
 	?>>varsity<br>
@@ -201,13 +203,13 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	?>"><br>
 
 	gender:
-	<input type="radio" name="gender" value="m"<?php
-	if ($gender === 'm') {
+	<input type="radio" name="gender" value="Male"<?php
+	if ($gender === 'Male') {
 		echo " checked";
 	}
 	?>>male
-	<input type="radio" name="gender" value="f"<?php
-	if ($gender === 'f') {
+	<input type="radio" name="gender" value="Female"<?php
+	if ($gender === 'Female') {
 		echo " checked";
 	}
 	?>>female<br>
@@ -215,16 +217,16 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	school:
 	<select name="school">
 		<option value="">Please select</option>
-		<option value="h"<?php
-		if ($school === 'h') {
+		<option value="Bromfield"<?php
+		if ($school === 'Bromfield') {
 			echo " selected";
 		}
-		?>>harvard</option>
-		<option value="ab"<?php
-		if ($school === 'ab') {
+		?>>Bromfield</option>
+		<option value="Acton-Boxborough"<?php
+		if ($school === 'Acton-Boxborough') {
 			echo " selected";
 		}
-		?>>acton_boxborough</option>
+		?>>Acton-Boxborough</option>
 	</select><br>
 
 	grade: <input type="number" name="grade" value="<?php

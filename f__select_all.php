@@ -14,7 +14,7 @@
 
 			foreach ($result as $row) {
 				printf("\n");
-				printf('<li> %d %s %s <a href="form_update_experimental.php?id=%s"> edit </a></li>',
+				printf('<li> %d %s %s <a href="f_GET_ID_select_POST_update.php?id=%s"> edit </a></li>',
 					htmlspecialchars($row['id']),
 					htmlspecialchars($row['firstname']),
 					htmlspecialchars($row['lastname']),

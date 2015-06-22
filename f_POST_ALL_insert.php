@@ -1,15 +1,3 @@
-<?php
-// the update expects a rower ID with the post command
-// a bit of php code checks ID is digits, and is a valid ID
-// redirect in this case
-if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
-	$id = $_GET['id'];
-} else {
-	header('Location: form_select_experimental.php');
-}
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +22,7 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	if (isset($_POST['submit'])) {
 		$fail = "";
 
-		if (!isset($_POST['cox']) || $_POST['cox'] === '') {
+		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
 			$fail .= " bad_cox";
 		} else {
 			$cox = $_POST['cox'];
@@ -106,88 +94,92 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 		if ($fail!="") {
 			printf('bad input: %s',$fail);
 		} else {
-		
-		// post to database
+			printf('cox: %s
+				<br>novice/varsity: %s
+				<br>firstname: %s
+				<br>lastname: %s
+				<br>gender: %s
+				<br>school: %s
+				<br>grade: %s
+				<br>email1: %s
+				<br>email2: %s
+				<br>cellphone: %s
+				<br>homephone: %s',
+				htmlspecialchars($cox, ENT_QUOTES),
+				htmlspecialchars($novice_varsity, ENT_QUOTES),
+				htmlspecialchars($first, ENT_QUOTES),
+				htmlspecialchars($last, ENT_QUOTES),
+				htmlspecialchars($gender, ENT_QUOTES),
+				htmlspecialchars($school, ENT_QUOTES),
+				htmlspecialchars($grade, ENT_QUOTES),
+				htmlspecialchars($email1, ENT_QUOTES),
+				htmlspecialchars($email2, ENT_QUOTES),
+				htmlspecialchars($cell, ENT_QUOTES),
+				htmlspecialchars($home, ENT_QUOTES));
 
+// database code
 			$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
-			$sql = sprintf("UPDATE rakers SET 
-				cox='%s',
-				novice_varsity='%s',
-				firstname='%s',
-				lastname='%s',
-				gender='%s',
-				school='%s',
-				grade='%s',
-				email1='%s',
-				email2='%s',
-				cellphone='%s'
-				WHERE id=%s",
-			mysqli_real_escape_string($db, $cox),
-			mysqli_real_escape_string($db, $novice_varsity),
-			mysqli_real_escape_string($db, $first),
-			mysqli_real_escape_string($db, $last),
-			mysqli_real_escape_string($db, $gender),
-			mysqli_real_escape_string($db, $school),
-			mysqli_real_escape_string($db, $grade),
-			mysqli_real_escape_string($db, $email1),
-			mysqli_real_escape_string($db, $email2),
-			mysqli_real_escape_string($db, $cell),
-			mysqli_real_escape_string($db, $home),
-			$id);
+			$sql = sprintf("INSERT INTO rakers (
+				cox,
+				novice_varsity,
+				firstname,
+				lastname,
+				gender,
+				school,
+				grade,
+				email1,
+				email2,
+				cellphone,
+				homephone) VALUES (
+				'%s','%s','%s','%s','%s','%s', %d,'%s','%s','%s','%s')",
+				mysqli_real_escape_string($db, $cox),
+				mysqli_real_escape_string($db, $novice_varsity),
+				mysqli_real_escape_string($db, $first),
+				mysqli_real_escape_string($db, $last),
+				mysqli_real_escape_string($db, $gender),
+				mysqli_real_escape_string($db, $school),
+				mysqli_real_escape_string($db, $grade),
+				mysqli_real_escape_string($db, $email1),
+				mysqli_real_escape_string($db, $email2),
+				mysqli_real_escape_string($db, $cell),
+				mysqli_real_escape_string($db, $home));
+
+// temporary
+		//	$sql = sprintf("INSERT INTO rakers () VALUES ()" );
 
 			mysqli_query($db, $sql);
 			mysqli_close($db);
-			echo '<p>User updated</p>';
-			//printf("<br>$sql");
+			echo '<br><br>User added';
+			printf("<br>$sql");
 		}
-
-	} else {
-// if not "submit" then prefill the fields
-// using current values from database
-		$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
-		$sql = sprintf('SELECT * FROM rakers WHERE id=%d', $id);
-		$result = mysqli_query($db, $sql);
-		foreach ($result as $row) {
-			$cox = $row['cox'];
-			$novice_varsity = $row['novice_varsity'];
-			$first = $row['firstname'];
-			$last = $row['lastname'];
-			$gender = $row['gender'];
-			$school = $row['school'];
-			$grade = $row['grade'];
-			$email1 = $row['email1'];
-			$email2 = $row['email2'];
-			$cell = $row['cellphone'];
-			$home = $row['homephone'];
-		}
-		mysqli_close($db);
 	}
-	?>
+
+?>
 
 
 </p>
 <form method="post" actions="">
 
 	cox:
-	<input type="radio" name="cox" value="y"<?php
-	if ($cox === 'y') {
+	<input type="radio" name="cox" value="coxswain"<?php
+	if ($cox === 'coxswain') {
 		echo " checked";
 	}
 	?>>yes
-	<input type="radio" name="cox" value="n"<?php
-	if ($cox === 'n') {
+	<input type="radio" name="cox" value=""<?php
+	if ($cox === '') {
 		echo " checked";
 	}
 	?>>no<br>
 
 	novice_varsity:
-	<input type="radio" name="novice_varsity" value="n"<?php
-	if ($novice_varsity === 'n') {
+	<input type="radio" name="novice_varsity" value="Novice"<?php
+	if ($novice_varsity === 'Novice') {
 		echo " checked";
 	}
 	?>>novice
-	<input type="radio" name="novice_varsity" value="v"<?php
-	if ($novice_varsity === 'v') {
+	<input type="radio" name="novice_varsity" value="Varsity"<?php
+	if ($novice_varsity === 'Varsity') {
 		echo " checked";
 	}
 	?>>varsity<br>
@@ -201,13 +193,13 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	?>"><br>
 
 	gender:
-	<input type="radio" name="gender" value="m"<?php
-	if ($gender === 'm') {
+	<input type="radio" name="gender" value="Male"<?php
+	if ($gender === 'Male') {
 		echo " checked";
 	}
 	?>>male
-	<input type="radio" name="gender" value="f"<?php
-	if ($gender === 'f') {
+	<input type="radio" name="gender" value="Female"<?php
+	if ($gender === 'Female') {
 		echo " checked";
 	}
 	?>>female<br>
@@ -215,16 +207,16 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	school:
 	<select name="school">
 		<option value="">Please select</option>
-		<option value="h"<?php
-		if ($school === 'h') {
+		<option value="Bromfield"<?php
+		if ($school === 'Bromfield') {
 			echo " selected";
 		}
-		?>>harvard</option>
-		<option value="ab"<?php
-		if ($school === 'ab') {
+		?>>Bromfield</option>
+		<option value="Acton-Boxborough"<?php
+		if ($school === 'Acton-Boxborough') {
 			echo " selected";
 		}
-		?>>acton_boxborough</option>
+		?>>Acton-Boxborough</option>
 	</select><br>
 
 	grade: <input type="number" name="grade" value="<?php
