@@ -11,6 +11,7 @@ readfile('navigation.tmpl.html');
 </head>
 <body>
 	<?php
+	$myPassword = '';
 	$cox = '';
 	$novice_varsity = '';
 	$first = '';
@@ -26,6 +27,12 @@ readfile('navigation.tmpl.html');
 // validation
 	if (isset($_POST['submit'])) {
 		$fail = "";
+
+		if (!isset($_POST['myPassword']) || $_POST['myPassword'] === '') {
+			$fail .= " bad_password";
+		} else {
+			$password = $_POST['myPassword'];
+		}
 
 		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
 			$fail .= " bad_cox";
@@ -99,6 +106,9 @@ readfile('navigation.tmpl.html');
 		if ($fail!="") {
 			printf('bad input: %s',$fail);
 		} else {
+
+			$hash = password_hash($myPassword, PASSWORD_DEFAULT);
+
 			printf('cox: %s
 				<br>novice/varsity: %s
 				<br>firstname: %s
@@ -125,6 +135,7 @@ readfile('navigation.tmpl.html');
 // database code
 			$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
 			$sql = sprintf("INSERT INTO rakers (
+				password,
 				cox,
 				novice_varsity,
 				firstname,
@@ -136,7 +147,9 @@ readfile('navigation.tmpl.html');
 				email2,
 				cellphone,
 				homephone) VALUES (
+				'%s',
 				'%s','%s','%s','%s','%s','%s', %d,'%s','%s','%s','%s')",
+			mysqli_real_escape_string($db, $hash),
 			mysqli_real_escape_string($db, $cox),
 			mysqli_real_escape_string($db, $novice_varsity),
 			mysqli_real_escape_string($db, $first),
@@ -164,6 +177,9 @@ readfile('navigation.tmpl.html');
 
 </p>
 <form method="post" actions="">
+
+	Password:
+	<input type="password" name="myPassword"><br>
 
 	cox:
 	<input type="radio" name="cox" value="coxswain"<?php
