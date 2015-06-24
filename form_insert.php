@@ -31,7 +31,7 @@ readfile('navigation.tmpl.html');
 		if (!isset($_POST['myPassword']) || $_POST['myPassword'] === '') {
 			$fail .= " bad_password";
 		} else {
-			$password = $_POST['myPassword'];
+			$myPassword = $_POST['myPassword'];
 		}
 
 		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {

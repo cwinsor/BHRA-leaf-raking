@@ -18,10 +18,13 @@
 			$isAdmin = $row['isAdmin'];
 
 echo $_POST['id'];
+echo '<br>';
 echo $_POST['password'];
-echo $row['password'];
+echo '<br>';
+echo $hash;
+echo '<br>';
 
-			if (password_verify($_POST['id'], $hash)) {
+			if (password_verify($_POST['password'], $hash)) {
 				echo 'Login successful';
 			} else {
 				echo 'Password incorrect';
