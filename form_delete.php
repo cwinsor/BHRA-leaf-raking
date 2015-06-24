@@ -1,5 +1,7 @@
 
 <?php
+//require 'form_auth.php';
+
 readfile('navigation.tmpl.html');
 ?>
 
@@ -28,6 +30,10 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	$sql = "DELETE FROM rakers WHERE id=$id";
 	mysqli_query($db, $sql);
 	mysqli_close($db);
+
+	echo '<p>User deleted</p>';
+	printf("<br>$sql");
+
 	?>
 </body>
 </html>

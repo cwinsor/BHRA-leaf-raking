@@ -10,12 +10,14 @@ readfile('navigation.tmpl.html');
 	<title>BHRA Leaf Raking</title>
 </head>
 <body>
+
 	<?php
+	$username = '';
 	$myPassword = '';
-	$cox = '';
-	$novice_varsity = '';
 	$first = '';
 	$last = '';
+	$cox = '';
+	$novice_varsity = '';
 	$gender = '';
 	$school = '';
 	$grade = '';
@@ -28,22 +30,16 @@ readfile('navigation.tmpl.html');
 	if (isset($_POST['submit'])) {
 		$fail = "";
 
+		if (!isset($_POST['username']) || $_POST['username'] === '') {
+			$fail .= " bad_username";
+		} else {
+			$username = $_POST['username'];
+		}
+
 		if (!isset($_POST['myPassword']) || $_POST['myPassword'] === '') {
 			$fail .= " bad_password";
 		} else {
 			$myPassword = $_POST['myPassword'];
-		}
-
-		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
-			$fail .= " bad_cox";
-		} else {
-			$cox = $_POST['cox'];
-		}
-
-		if (!isset($_POST['novice_varsity']) || $_POST['novice_varsity'] === '') {
-			$fail .= " bad_novice_varsity";
-		} else {
-			$novice_varsity = $_POST['novice_varsity'];
 		}
 
 		if (!isset($_POST['first']) || $_POST['first'] === '') {
@@ -56,6 +52,18 @@ readfile('navigation.tmpl.html');
 			$fail .= " bad_lastname";
 		} else {
 			$last = $_POST['last'];
+		}
+
+		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
+			$fail .= " bad_cox";
+		} else {
+			$cox = $_POST['cox'];
+		}
+
+		if (!isset($_POST['novice_varsity']) || $_POST['novice_varsity'] === '') {
+			$fail .= " bad_novice_varsity";
+		} else {
+			$novice_varsity = $_POST['novice_varsity'];
 		}
 
 		if (!isset($_POST['gender']) || $_POST['gender'] === '') {
@@ -109,10 +117,14 @@ readfile('navigation.tmpl.html');
 
 			$hash = password_hash($myPassword, PASSWORD_DEFAULT);
 
-			printf('cox: %s
-				<br>novice/varsity: %s
+			printf('
+				<br>username: %s
+				<br>password: %s
 				<br>firstname: %s
 				<br>lastname: %s
+				<br>hash: %s
+				<br>cox: %s
+				<br>novice/varsity: %s
 				<br>gender: %s
 				<br>school: %s
 				<br>grade: %s
@@ -120,10 +132,13 @@ readfile('navigation.tmpl.html');
 				<br>email2: %s
 				<br>cellphone: %s
 				<br>homephone: %s',
-				htmlspecialchars($cox, ENT_QUOTES),
-				htmlspecialchars($novice_varsity, ENT_QUOTES),
+				htmlspecialchars($username, ENT_QUOTES),
+				htmlspecialchars($myPassword, ENT_QUOTES),
 				htmlspecialchars($first, ENT_QUOTES),
 				htmlspecialchars($last, ENT_QUOTES),
+				htmlspecialchars($hash, ENT_QUOTES),
+				htmlspecialchars($cox, ENT_QUOTES),
+				htmlspecialchars($novice_varsity, ENT_QUOTES),
 				htmlspecialchars($gender, ENT_QUOTES),
 				htmlspecialchars($school, ENT_QUOTES),
 				htmlspecialchars($grade, ENT_QUOTES),
@@ -135,11 +150,12 @@ readfile('navigation.tmpl.html');
 // database code
 			$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
 			$sql = sprintf("INSERT INTO rakers (
+				username,
 				password,
-				cox,
-				novice_varsity,
 				firstname,
 				lastname,
+				cox,
+				novice_varsity,
 				gender,
 				school,
 				grade,
@@ -147,13 +163,14 @@ readfile('navigation.tmpl.html');
 				email2,
 				cellphone,
 				homephone) VALUES (
-				'%s',
+				'%s','%s',
 				'%s','%s','%s','%s','%s','%s', %d,'%s','%s','%s','%s')",
+			mysqli_real_escape_string($db, $username),
 			mysqli_real_escape_string($db, $hash),
-			mysqli_real_escape_string($db, $cox),
-			mysqli_real_escape_string($db, $novice_varsity),
 			mysqli_real_escape_string($db, $first),
 			mysqli_real_escape_string($db, $last),
+			mysqli_real_escape_string($db, $cox),
+			mysqli_real_escape_string($db, $novice_varsity),
 			mysqli_real_escape_string($db, $gender),
 			mysqli_real_escape_string($db, $school),
 			mysqli_real_escape_string($db, $grade),
@@ -178,8 +195,20 @@ readfile('navigation.tmpl.html');
 </p>
 <form method="post" actions="">
 
+	username: <input type="text" name="username" value="<?php
+	echo htmlspecialchars($username);
+	?>"><br>
+
 	Password:
 	<input type="password" name="myPassword"><br>
+
+	first: <input type="text" name="first" value="<?php
+	echo htmlspecialchars($first);
+	?>"><br>
+
+	last: <input type="text" name="last" value="<?php
+	echo htmlspecialchars($last);
+	?>"><br>
 
 	cox:
 	<input type="radio" name="cox" value="coxswain"<?php
@@ -204,14 +233,6 @@ readfile('navigation.tmpl.html');
 		echo " checked";
 	}
 	?>>varsity<br>
-
-	first: <input type="text" name="first" value="<?php
-	echo htmlspecialchars($first);
-	?>"><br>
-
-	last: <input type="text" name="last" value="<?php
-	echo htmlspecialchars($last);
-	?>"><br>
 
 	gender:
 	<input type="radio" name="gender" value="Male"<?php

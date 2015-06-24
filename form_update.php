@@ -1,5 +1,7 @@
 
 <?php
+//require 'form_auth.php';
+
 readfile('navigation.tmpl.html');
 ?>
 
@@ -23,10 +25,12 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 <body>
 	<p><?php
 
-	$cox = '';
-	$novice_varsity = '';
+	$username = '';
+	$myPassword = '';
 	$first = '';
 	$last = '';
+	$cox = '';
+	$novice_varsity = '';
 	$gender = '';
 	$school = '';
 	$grade = '';
@@ -39,16 +43,16 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 	if (isset($_POST['submit'])) {
 		$fail = "";
 
-		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
-			$fail .= " bad_cox";
+		if (!isset($_POST['username']) || $_POST['username'] === '') {
+			$fail .= " bad_username";
 		} else {
-			$cox = $_POST['cox'];
+			$username = $_POST['username'];
 		}
 
-		if (!isset($_POST['novice_varsity']) || $_POST['novice_varsity'] === '') {
-			$fail .= " bad_novice_varsity";
+		if (!isset($_POST['myPassword']) || $_POST['myPassword'] === '') {
+			$fail .= " bad_password";
 		} else {
-			$novice_varsity = $_POST['novice_varsity'];
+			$myPassword = $_POST['myPassword'];
 		}
 
 		if (!isset($_POST['first']) || $_POST['first'] === '') {
@@ -61,6 +65,18 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 			$fail .= " bad_lastname";
 		} else {
 			$last = $_POST['last'];
+		}
+
+		if (!isset($_POST['cox']) /* || $_POST['cox'] === ''*/) {
+			$fail .= " bad_cox";
+		} else {
+			$cox = $_POST['cox'];
+		}
+
+		if (!isset($_POST['novice_varsity']) || $_POST['novice_varsity'] === '') {
+			$fail .= " bad_novice_varsity";
+		} else {
+			$novice_varsity = $_POST['novice_varsity'];
 		}
 
 		if (!isset($_POST['gender']) || $_POST['gender'] === '') {
@@ -116,10 +132,12 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 
 			$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
 			$sql = sprintf("UPDATE rakers SET 
-				cox='%s',
-				novice_varsity='%s',
+				username='%s',
+				password='%s',
 				firstname='%s',
 				lastname='%s',
+				cox='%s',
+				novice_varsity='%s',
 				gender='%s',
 				school='%s',
 				grade='%s',
@@ -128,10 +146,12 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 				cellphone='%s',
 				homephone='%s'
 				WHERE id='%s';",
-				mysqli_real_escape_string($db, $cox),
-				mysqli_real_escape_string($db, $novice_varsity),
+				mysqli_real_escape_string($db, $username),
+				mysqli_real_escape_string($db, $myPassword),
 				mysqli_real_escape_string($db, $first),
 				mysqli_real_escape_string($db, $last),
+				mysqli_real_escape_string($db, $cox),
+				mysqli_real_escape_string($db, $novice_varsity),
 				mysqli_real_escape_string($db, $gender),
 				mysqli_real_escape_string($db, $school),
 				mysqli_real_escape_string($db, $grade),
@@ -152,13 +172,15 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 // if not post then prefill the fields
 // using current values from database
 		$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');
-		$sql = sprintf('SELECT * FROM rakers WHERE id=%d', $id);
+		$sql = sprintf('SELECT * FROM rakers WHERE id=%s', $id);
 		$result = mysqli_query($db, $sql);
 		foreach ($result as $row) {
-			$cox = $row['cox'];
-			$novice_varsity = $row['novice_varsity'];
+			$username = $row['username'];
+			$myPassword = $row['password'];
 			$first = $row['firstname'];
 			$last = $row['lastname'];
+			$cox = $row['cox'];
+			$novice_varsity = $row['novice_varsity'];
 			$gender = $row['gender'];
 			$school = $row['school'];
 			$grade = $row['grade'];
@@ -174,6 +196,21 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 
 </p>
 <form method="post" actions="">
+
+	username: <input type="text" name="username" value="<?php
+	echo htmlspecialchars($username);
+	?>"><br>
+
+	Password:
+	<input type="password" name="myPassword"><br>
+
+	first: <input type="text" name="first" value="<?php
+	echo htmlspecialchars($first);
+	?>"><br>
+
+	last: <input type="text" name="last" value="<?php
+	echo htmlspecialchars($last);
+	?>"><br>
 
 	cox:
 	<input type="radio" name="cox" value="coxswain"<?php
@@ -198,14 +235,6 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 		echo " checked";
 	}
 	?>>varsity<br>
-
-	first: <input type="text" name="first" value="<?php
-	echo htmlspecialchars($first);
-	?>"><br>
-
-	last: <input type="text" name="last" value="<?php
-	echo htmlspecialchars($last);
-	?>"><br>
 
 	gender:
 	<input type="radio" name="gender" value="Male"<?php
