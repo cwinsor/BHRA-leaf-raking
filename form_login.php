@@ -2,6 +2,7 @@
 session_start();
 
 $message = '';
+
 if (isset($_POST['username']) &&
 	isset($_POST['password'])) {
 	$db = mysqli_connect('localhost', 'root', '', 'bhra_leaf_raking');

@@ -1,6 +1,6 @@
 
 <?php
-//require 'form_auth.php';
+require 'form_auth.php';
 
 readfile('navigation.tmpl.html');
 ?>
