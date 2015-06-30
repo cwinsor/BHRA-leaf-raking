@@ -18,12 +18,17 @@ readfile('navigation.tmpl.html');
 
 		foreach ($result as $row) {
 			printf("\n");
-			printf('<li> %s %s
+			printf('<li> %d %s %s
 				<a href="form_update.php?id=%s">edit</a>
 				<a href="form_delete.php?id=%s">delete</a>
+				<a href="form_admin_create_login.php?id=%s">create_login</a>
+				<a href="form_admin_email_login.php?id=%s">email_login</a>
 				</li>',
+				htmlspecialchars($row['id']),
 				htmlspecialchars($row['firstname']),
 				htmlspecialchars($row['lastname']),
+				htmlspecialchars($row['id']),
+				htmlspecialchars($row['id']),
 				htmlspecialchars($row['id']),
 				htmlspecialchars($row['id'])
 				);
